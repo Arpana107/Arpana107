@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo List</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    #todo-list {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .todo-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px;
+      margin-bottom: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .todo-item input {
+      margin-right: 8px;
+    }
+
+    .btn-remove {
+      cursor: pointer;
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+<div id="todo-list">
+  <h2>Todo List</h2>
+  <div id="todo-items"></div>
+  <div>
+    <input type="text" id="new-item" placeholder="New item">
+    <button onclick="addItem()">Add</button>
+  </div>
+</div>
+
+<script>
+  const todoItems = [];
+
+  function renderTodoList() {
+    const todoItemsContainer = document.getElementById('todo-items');
+    todoItemsContainer.innerHTML = '';
+
+    todoItems.forEach((item, index) => {
+      const todoItemDiv = document.createElement('div');
+      todoItemDiv.className = 'todo-item';
+
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.checked = item.completed;
+      checkbox.addEventListener('change', () => toggleItemCompletion(index));
+
+      const label = document.createElement('label');
+      label.textContent = item.text;
+
+      const removeButton = document.createElement('span');
+      removeButton.textContent = 'Remove';
+      removeButton.className = 'btn-remove';
+      removeButton.addEventListener('click', () => removeItem(index));
+
+      todoItemDiv.appendChild(checkbox);
+      todoItemDiv.appendChild(label);
+      todoItemDiv.appendChild(removeButton);
+
+      todoItemsContainer.appendChild(todoItemDiv);
+    });
+  }
+
+  function addItem() {
+    const newItemInput = document.getElementById('new-item');
+    const newItemText = newItemInput.value.trim();
+
+    if (newItemText !== '') {
+      todoItems.push({ text: newItemText, completed: false });
+      newItemInput.value = '';
+      renderTodoList();
+    }
+  }
+
+  function toggleItemCompletion(index) {
+    todoItems[index].completed = !todoItems[index].completed;
+    renderTodoList();
+  }
+
+  function removeItem(index) {
+    todoItems.splice(index, 1);
+    renderTodoList();
+  }
+
+  renderTodoList();
+</script>
+
+</body>
+</html>
